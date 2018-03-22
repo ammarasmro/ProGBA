@@ -5,11 +5,16 @@ import data_structures.*;
 public class DataStructureConverter {
 
     public static Triple stringsToTriple(String subject, String verb, String object){
-        return new Triple(subject, verb, object);
+        Triple triple = new Triple(subject, verb, object);
+        EnrichmentUtility.enrichNodeWithKeywords(triple.getSubject());
+        EnrichmentUtility.enrichNodeWithKeywords(triple.getObject());
+        return triple;
     }
 
-    public static Keyword stringToKeyword(String keyword){
-        return new Keyword(keyword);
+    public static Keyword stringToKeyword(String keywordString){
+        Keyword keyword = new Keyword(keywordString);
+        EnrichmentUtility.enrichKeywordWithCategories(keyword);
+        return keyword;
     }
 
     public static Category stringToCategory(String category){

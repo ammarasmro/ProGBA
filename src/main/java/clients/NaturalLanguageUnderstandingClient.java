@@ -63,6 +63,7 @@ public class NaturalLanguageUnderstandingClient {
     }
 
     private List<KeywordsResult> getKeywordsResults(String sentence) {
+        initializeForKeywordsExtraction();
         parameters = new AnalyzeOptions.Builder()
                 .text(sentence)
                 .features(features)
