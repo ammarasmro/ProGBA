@@ -21,7 +21,7 @@ public class OpenIEClient {
 
     public OpenIEClient() {
         Properties props = new Properties();
-        props.setProperty("annotators", "tokenize,ssplit,pos,lemma,depparse,natlog,openie,ner,parse,dcoref");
+        props.setProperty("annotators", "tokenize,ssplit,pos,lemma,depparse,natlog,openie,ner,parse,dcoref,coref.mention");
         props.setProperty("openie.triple.all_nominals", "true");
 
         pipeline = new StanfordCoreNLP(props);
