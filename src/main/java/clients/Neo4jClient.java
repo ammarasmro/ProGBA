@@ -48,12 +48,7 @@ public class Neo4jClient implements AutoCloseable {
                             TextUtils.toUpperCamelCase(destinationType),
                             TextUtils.toLowerCamelCase(destinationTextType),
                             TextUtils.toUpperUnderscored(relationType)),
-                            parameters( "source", source, "relation", relation, "destination", destination,
-                                    "sourceType", TextUtils.toUpperCamelCase(sourceType),
-                                    "sourceTextType", TextUtils.toLowerCamelCase(sourceTextType),
-                                    "destinationType", TextUtils.toUpperCamelCase(destinationType),
-                                    "destinationTextType", TextUtils.toLowerCamelCase(destinationTextType),
-                                    "relationType", TextUtils.toUpperUnderscored(relationType)) );
+                            parameters( "source", source, "relation", relation, "destination", destination ) );
                     result.consume();
                     return "Triple added!";
                 }
@@ -61,51 +56,6 @@ public class Neo4jClient implements AutoCloseable {
         }
     }
 
-
-
-    public static void startNewProject( String project, String aspect )
-    {
-        try ( Session session = driver.session() )
-        {
-            String greeting = session.writeTransaction( new TransactionWork<String>()
-            {
-                @Override
-                public String execute( Transaction tx )
-                {
-                    StatementResult result = tx.run( "CREATE (car:Project {title:$project, started:timestamp()})\n" +
-                                    "CREATE (design:Aspect {aspectName: $aspect})\n" +
-                                    "CREATE (car)-[:HASASPECT]->(design)",
-                            parameters( "project", project, "aspect", aspect ) );
-                    result.consume();
-                    return "Project " + project + " was created!";
-                }
-            } );
-            System.out.println( greeting );
-        }
-    }
-
-    public void addCategoryLevel(String categoryLevel, String previousCategoryLevel) {
-        try ( Session session = driver.session() )
-        {
-            String greeting = session.writeTransaction( new TransactionWork<String>()
-            {
-                @Override
-                public String execute( Transaction tx )
-                {
-                    StatementResult result = tx.run( "MERGE (categoryLevel:CategoryLevel {categoryText: $categoryLevel})\n" +
-                                    "WITH categoryLevel\n" +
-                                    "MATCH (categoryLevelPrevious:CategoryLevel {categoryText: $previousCategoryLevel})\n" +
-                                    "WITH categoryLevelPrevious, categoryLevel\n" +
-                                    "MERGE (categoryLevel)-[:BELONGSTO]->(categoryLevelPrevious)",
-                            parameters( "categoryLevel", categoryLevel, "previousCategoryLevel", previousCategoryLevel ));
-                    result.consume();
-                    return "Category level added!\n" + categoryLevel;
-                }
-            } );
-            System.out.println( greeting );
-
-        }
-    }
 
     public void getAllData()
     {
@@ -146,32 +96,9 @@ public class Neo4jClient implements AutoCloseable {
 
     public static void main( String... args ) throws Exception
     {
-        deleteEverything();
-        startNewProject("Car", "Design");
-
 
 //        Neo4jClient neo4jClient = new Neo4jClient( "bolt://localhost:7687", "ammar", "ammar" );
 
-//        neo4jClient.addKeyword(new Keyword("Keyword 1"), "Design");
-//        neo4jClient.addKeyword(new Keyword("Keyword 2"), "Design");
-//        neo4jClient.addKeyword(new Keyword("Keyword 3"), "Design");
-
-//        neo4jClient.addRichTriplet(new Triple("Subject 1", "Verb 1", "Object 1"));
-//        neo4jClient.linkKeywordToSubject("Subject 1", new Keyword("Keyword 1"));
-//        neo4jClient.linkObjectToKeyword("Object 1", new Keyword("Keyword 3"));
-
-//        neo4jClient.addRichTriplet(new Triple("Subject 2", "Verb 2", "Object 2"));
-//        neo4jClient.linkKeywordToSubject("Subject 2", new Keyword("Keyword 1"));
-//        neo4jClient.linkObjectToKeyword("Object 2", new Keyword("Keyword 3"));
-
-//        try ( GraphDispatcher neo4jClient = new GraphDispatcher( "bolt://localhost:7687", "ammar", "ammar" ) )
-//        {
-//        		greeter.startNewProject("Car", "Design");
-//        		greeter.addAspectsToProject("Car", "Performance");
-//        		greeter.addTriplet("Automotive Design", "a set of vocations and occupations", "IS", "Car", "Design");
-//        		greeter.addTriplet("Automotive Suspension Design", "a kind of design", "IS", "Car", "Design");
-//            greeter.printGreeting( "hello, world" );
-//        }
     }
 
     public static void closeThis(){
