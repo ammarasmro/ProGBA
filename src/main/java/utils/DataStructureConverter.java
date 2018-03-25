@@ -1,5 +1,6 @@
 package utils;
 
+import com.google.gson.Gson;
 import data_structures.*;
 
 public class DataStructureConverter {
@@ -27,6 +28,11 @@ public class DataStructureConverter {
 
     public static SemanticRole stringsToSemanticRole(String sentence, String subject, String verb, String object){
         return new SemanticRole(sentence, stringsToTriple(subject, verb, object));
+    }
+
+    public static DrQAResponseDocument[] jsonStringToDrQADocsArray(String json){
+        Gson gson = new Gson();
+        return gson.fromJson(json, DrQAResponseDocument[].class);
     }
 
     public static void main(String[] args) {

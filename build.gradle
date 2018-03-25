@@ -14,6 +14,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'idea'
 
 group = ''
 version = '0.0.1-SNAPSHOT'
@@ -29,6 +30,8 @@ dependencies {
 	compile('com.ibm.watson.developer_cloud:java-sdk:5.1.1')
     compile 'edu.stanford.nlp:stanford-corenlp:3.9.1'
     compile 'edu.stanford.nlp:stanford-corenlp:3.9.1:models'
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+	compile 'org.neo4j.driver:neo4j-java-driver:1.6.0-alpha02'
+	compile 'com.google.guava:guava:24.1-jre'
+	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('io.projectreactor:reactor-test')
 }
