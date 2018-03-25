@@ -1,4 +1,4 @@
-package data;
+package interfaces;
 
 
 import clients.Neo4jClient;
@@ -55,7 +55,6 @@ public class GraphDBInterface {
 
     public static void main(String[] args) {
         Neo4jClient.deleteEverything();
-//        Neo4jClient.startNewProject("Car", "Design");
         addProjectAspectTriple("Car", "has aspect", "Design");
         addAspectToKeywordLink("Design", "has relation", "functional design");
         addSubjectObjectTriple("design", "is", "cool");
