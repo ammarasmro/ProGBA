@@ -13,7 +13,6 @@ public class CreativeTripleProcessor {
 
 
     public static List<Triple> processMentionsIntoTriples(List<Mention> mentions){
-        String subject = "", verb, object;
         int depth = 4, i = 1;
         List<Triple> triples = new ArrayList<Triple>();
         if(mentions.size() < 2) return triples;
@@ -25,7 +24,7 @@ public class CreativeTripleProcessor {
             return triples;
         }
 
-        subject = (isSubjectMaterial(temp)) ? temp.spanToString() : findSubject(iterator);
+        String subject = (isSubjectMaterial(temp)) ? temp.spanToString() : findSubject(iterator);
         while(iterator.hasNext() && i < depth){
             temp = iterator.next();
             if(isObjectMaterial(temp)){
