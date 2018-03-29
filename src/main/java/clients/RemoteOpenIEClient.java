@@ -1,5 +1,6 @@
 package clients;
 
+import algorithms.CreativeOpenIEProcessor;
 import data_structures.Triple;
 import edu.stanford.nlp.ie.util.RelationTriple;
 import edu.stanford.nlp.ling.CoreAnnotations;
@@ -36,12 +37,7 @@ public class RemoteOpenIEClient {
             // Get the OpenIE triples for the sentence
             Collection<RelationTriple> relationTriples =
                     line.get(NaturalLogicAnnotations.RelationTriplesAnnotation.class);
-            for (RelationTriple relationTriple : relationTriples) {
-                String subject = relationTriple.subjectGloss();
-                String verb = relationTriple.relationGloss();
-                String object = relationTriple.objectGloss();
-                triples.add(DataStructureConverter.stringsToTriple(subject, verb, object));
-            }
+            triples.addAll(CreativeOpenIEProcessor.processRelationsIntoTriples(relationTriples));
         }
 
         return triples;
@@ -50,6 +46,11 @@ public class RemoteOpenIEClient {
     private void annotateThis(String sentence){
         document = new Annotation(sentence);
         pipeline.annotate(document);
+    }
+
+    public static void main(String[] args) {
+        RemoteOpenIEClient openIEClient = new RemoteOpenIEClient();
+        openIEClient.getTriples("Ammar is the best");
     }
 
 
