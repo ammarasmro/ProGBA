@@ -1,6 +1,8 @@
 package data_structures;
 
 public class DrQAResponseDocument {
+
+
     private String context;
     private String doc_id;
     private double doc_score;
@@ -10,6 +12,30 @@ public class DrQAResponseDocument {
 
     DrQAResponseDocument(){
 
+    }
+
+    public String getContext() {
+        return context;
+    }
+
+    public String getDoc_id() {
+        return doc_id;
+    }
+
+    public double getDoc_score() {
+        return doc_score;
+    }
+
+    public int getResult_number() {
+        return result_number;
+    }
+
+    public String getSpan() {
+        return span;
+    }
+
+    public double getSpan_score() {
+        return span_score;
     }
 
     @Override

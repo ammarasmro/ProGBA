@@ -45,7 +45,7 @@ public class SentenceProcessingPipeline {
     }
 
     private void processSentenceWithCoref(){
-//        corefTriples.addAll(CoreNLPInterface.getCorefTriplesOf(sentence));
+        corefTriples.addAll(CoreNLPInterface.getCorefTriplesOf(sentence));
         triples.addAll(corefTriples);
     }
 
