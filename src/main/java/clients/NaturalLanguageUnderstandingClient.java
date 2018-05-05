@@ -5,6 +5,8 @@ import com.ibm.watson.developer_cloud.natural_language_understanding.v1.NaturalL
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.*;
 import data_structures.Category;
 import data_structures.Keyword;
+import data_structures.SemanticRole;
+import utils.DataStructureConverter;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -44,8 +46,7 @@ public class NaturalLanguageUnderstandingClient {
     }
 
     private void initializeForKeywordsExtraction() {
-        KeywordsOptions keywords;
-        keywords= new KeywordsOptions.Builder()
+        KeywordsOptions keywords = new KeywordsOptions.Builder()
                 .limit(3)
                 .build();
         features = new Features.Builder()
@@ -54,13 +55,20 @@ public class NaturalLanguageUnderstandingClient {
     }
 
     private void initializeForCategoriesExtraction() {
-        initializeForKeywordsExtraction();
-        CategoriesOptions categories;
-        categories = new CategoriesOptions();
+        CategoriesOptions categories = new CategoriesOptions();
         features = new Features.Builder()
                 .categories(categories)
                 .build();
     }
+
+    private void initializeForSemanticRolesExtraction() {
+        SemanticRolesOptions semanticRoles = new SemanticRolesOptions.Builder()
+                .build();
+        features = new Features.Builder()
+                .semanticRoles(semanticRoles)
+                .build();
+    }
+
 
     private List<KeywordsResult> getKeywordsResults(String sentence) {
         initializeForKeywordsExtraction();
@@ -88,6 +96,19 @@ public class NaturalLanguageUnderstandingClient {
         return response.getCategories();
     }
 
+    private List<SemanticRolesResult> getSemanticRolesResults(String sentence) {
+        initializeForSemanticRolesExtraction();
+        parameters = new AnalyzeOptions.Builder()
+                .text(sentence)
+                .features(features)
+                .language("en")
+                .build();
+        response = service
+                .analyze(parameters)
+                .execute();
+        return response.getSemanticRoles();
+    }
+
     public List<Keyword> getKeywordsOfSentence(String sentence){
         List<Keyword> keywords = new ArrayList<Keyword>();
         for(KeywordsResult keywordsResult: getKeywordsResults(sentence)) {
@@ -104,10 +125,21 @@ public class NaturalLanguageUnderstandingClient {
         return categories;
     }
 
+    public List<SemanticRole> getSemanticRolesOfDocument(String document){
+        List<SemanticRole> semanticRoles = new ArrayList<>();
+        for(SemanticRolesResult result: getSemanticRolesResults(document) ) {
+            semanticRoles.add( DataStructureConverter.semanticResultStringsToSemanticRole(result.getSentence(),
+                    result.getSubject().getText(), result.getAction().getText(),
+                    result.getObject().getText(), result.getSubject().getKeywords(), result.getObject().getKeywords()));
+        }
+        return semanticRoles;
+    }
+
     public static void main(String[] args) {
 
         NaturalLanguageUnderstandingClient testClient = new NaturalLanguageUnderstandingClient();
         System.out.println(testClient.getKeywordsOfSentence("Ammar is back"));
         System.out.println(testClient.getCategoryOfSentence("functional design"));
+        System.out.println(testClient.getSemanticRolesOfDocument("Canada is a good place to work."));
     }
 }

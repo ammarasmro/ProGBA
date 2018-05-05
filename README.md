@@ -27,12 +27,6 @@ Coref annotators
 
 ## Stanford CoreNLP Servers
 
-First more into the directory that contains the unzipped contents of the CoreNLP
-```bash
-$ pwd
-/Users/ammarasmro/Software/NLP/stanford-corenlp-full-2018-02-27
-```
-
 Run the servers using
 ```bash
 # For the Open IE annotators

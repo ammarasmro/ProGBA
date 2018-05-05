@@ -28,7 +28,7 @@ public class OpenIEClient {
     }
 
     public List<Triple> getTriples(String highlight) {
-        List<Triple> triples = new ArrayList();
+        List<Triple> triples = new ArrayList<>();
         Annotation doc = new Annotation(highlight);
         pipeline.annotate(doc);
 
