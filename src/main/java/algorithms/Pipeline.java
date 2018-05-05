@@ -47,6 +47,7 @@ public class Pipeline {
         pipeline.processDocumentsWithNLU(pipelineDocument);
         pipeline.putDocumentThroughPipeline(pipelineDocument);
 //        pipeline.processDocumentsWithNLU(null);
+        System.out.flush();
     }
 
 
