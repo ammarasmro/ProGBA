@@ -1,6 +1,7 @@
 package data;
 
 import algorithms.Pipeline;
+import conversation_datastructures.UserUtterance;
 import data_structures.*;
 
 import java.util.*;
@@ -19,8 +20,11 @@ public class DataManager {
 
     Set<Triple> tripleSet;
 
+    List<UserUtterance> userUtterances;
 
+    private String mainTag;
 
+    private Set<String> currentTags;
 
     public DataManager(){
 
@@ -28,6 +32,9 @@ public class DataManager {
         pipelineDocumentsMap = new HashMap<>();
         documentDirectory = new HashMap<>();
         tripleSet = new HashSet<>();
+
+        userUtterances = new ArrayList<>();
+        currentTags = new HashSet<>();
     }
 
     public boolean storeTriple(Triple triple){
@@ -46,6 +53,38 @@ public class DataManager {
 
     public PipelineDocument getPipelineDocumentByResultNumber(int resultNumber){
         return documentDirectory.get(resultNumber);
+    }
+
+    public List<UserUtterance> getUserUtterances() {
+        return userUtterances;
+    }
+
+    public void setUserUtterances(List<UserUtterance> userUtterances) {
+        this.userUtterances = userUtterances;
+    }
+
+    public void addUserUtterance(String utteranceText) {
+        userUtterances.add(new UserUtterance(utteranceText));
+        updateTags();
+    }
+
+    public UserUtterance getUtteranceByIndex(int index){
+        return userUtterances.get(index);
+    }
+
+    private void updateTags(){
+        currentTags.clear();
+        for(Concept concept: getUtteranceByIndex(userUtterances.size() - 1).getConcepts()){
+            currentTags.add(concept.getConcept());
+        }
+    }
+
+    public String getMainTag() {
+        return mainTag;
+    }
+
+    public void setMainTag(String mainTag) {
+        this.mainTag = mainTag;
     }
 
 
