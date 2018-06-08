@@ -1,5 +1,6 @@
 package data_structures;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PipelineDocument {
@@ -27,6 +28,7 @@ public class PipelineDocument {
         this.resultNumber = drQAResponseDocument.getResult_number();
         this.span = drQAResponseDocument.getSpan();
         this.spanScore = drQAResponseDocument.getSpan_score();
+        this.triples = new ArrayList<Triple>();
     }
 
     public String getContext(){
