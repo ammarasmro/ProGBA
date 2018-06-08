@@ -54,6 +54,11 @@ public class DataStructureConverter {
         return gson.fromJson(json, DrQAResponseDocument[].class);
     }
 
+    public static WikipediaDocument[] jsonStringToWikipediaDocumentsArray(String json){
+        Gson gson = new Gson();
+        return gson.fromJson(json, WikipediaDocument[].class);
+    }
+
     public static Triple relationTripleToTriple(RelationTriple relationTriple){
         return stringsToTriple(relationTriple.subjectGloss(), relationTriple.relationGloss(), relationTriple.objectGloss());
     }
