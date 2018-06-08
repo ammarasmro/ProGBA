@@ -25,9 +25,26 @@ public class DrQAClient {
         return result;
     }
 
+    public static String queryTextToDocumentStringJsonResponse(String query, int numberOfDocuments) {
+        String result = "";
+        try {
+            URL hostUrl = new URL("http://localhost:5000/docs/");
+            URL queryUrl = new URL(hostUrl, String.format("%s/%d", query, numberOfDocuments));
+            URLConnection connection = queryUrl.openConnection();
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    connection.getInputStream()));
+            result = HttpUtils.bufferedReaderToString(in);
+            in.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 
     public static void main(String[] args) throws Exception {
 
-        queryTextToStringJsonResponse("Automotive%design");
+//        System.out.println(queryTextToStringJsonResponse("Automotive%design"));
+        System.out.println(queryTextToDocumentStringJsonResponse("Automotive%design", 5));
     }
 }

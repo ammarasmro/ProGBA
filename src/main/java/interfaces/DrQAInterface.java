@@ -2,6 +2,7 @@ package interfaces;
 
 import clients.DrQAClient;
 import data_structures.DrQAResponseDocument;
+import data_structures.WikipediaDocument;
 import utils.DataStructureConverter;
 
 public class DrQAInterface {
@@ -11,8 +12,17 @@ public class DrQAInterface {
         return DataStructureConverter.jsonStringToDrQADocsArray(DrQAClient.queryTextToStringJsonResponse(query));
     }
 
+    public static WikipediaDocument[] retrieveWikiDocs(String query){
+
+        return DataStructureConverter.jsonStringToWikipediaDocumentsArray(DrQAClient.queryTextToDocumentStringJsonResponse(query, 5));
+    }
+
     public static void main(String[] args) {
-        for(DrQAResponseDocument doc: queryDocuments("Automotive%20Design")){
+//        for(DrQAResponseDocument doc: queryDocuments("Automotive%20Design")){
+//            System.out.println(doc);
+//        }
+
+        for(WikipediaDocument doc: retrieveWikiDocs("Automotive%20Design")){
             System.out.println(doc);
         }
     }
