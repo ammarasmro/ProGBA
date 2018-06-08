@@ -27,7 +27,7 @@ Coref annotators
 
 ## Stanford CoreNLP Servers
 
-First more into the directory that contains the unzipped contents of the CoreNLP
+First move into the directory that contains the unzipped contents of the CoreNLP
 ```bash
 $ pwd
 /Users/ammarasmro/Software/NLP/stanford-corenlp-full-2018-02-27
@@ -40,4 +40,14 @@ java -mx4g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer -port 8000 -t
 
 # For the Coref annotators
 java -mx4g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer -port 9000 -timeout 15000
+```
+
+
+## MongoDB
+To start an instance
+```bash
+mongod --replSet "rs"
+# Then, from another terminal window
+mongo
+> rs.initiate()
 ```

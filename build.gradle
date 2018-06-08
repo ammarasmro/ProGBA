@@ -29,12 +29,12 @@ dependencies {
 	compile 'org.mongodb:mongodb-driver-sync:3.7.0'
 	compile 'org.mongodb:mongodb-driver:3.7.0'
 	compile 'org.mongodb:mongo-java-driver:3.7.0'
-	compile('org.springframework.boot:spring-boot-starter-webflux')
+//	compile('org.springframework.boot:spring-boot-starter-webflux')
 	compile('com.ibm.watson.developer_cloud:java-sdk:5.1.1')
     compile 'edu.stanford.nlp:stanford-corenlp:3.9.1'
     compile 'edu.stanford.nlp:stanford-corenlp:3.9.1:models'
 	compile 'org.neo4j.driver:neo4j-java-driver:1.6.0-alpha02'
 	compile 'com.google.guava:guava:24.1-jre'
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+//	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('io.projectreactor:reactor-test')
 }
