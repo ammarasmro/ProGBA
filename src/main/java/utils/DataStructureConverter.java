@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.SemanticRolesKeyword;
 import data_structures.*;
 import edu.stanford.nlp.ie.util.RelationTriple;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.List;
 
@@ -64,7 +65,7 @@ public class DataStructureConverter {
     }
 
     public static PipelineDocument wikiDocumentToPipelineDocument(WikipediaDocument wikiDoc, int resultNumber){
-        return new PipelineDocument(wikiDoc.getTitle(), wikiDoc.getContent(), resultNumber);
+        return new PipelineDocument(wikiDoc.getTitle(), StringEscapeUtils.unescapeJava(wikiDoc.getContent()), resultNumber);
     }
 
     public static void main(String[] args) {

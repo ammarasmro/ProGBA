@@ -6,6 +6,7 @@ import data_structures.SemanticRole;
 import data_structures.Triple;
 import interfaces.CoreNLPInterface;
 import interfaces.CorefInterface;
+import interfaces.NLUInterface;
 import interfaces.OpenIEInterface;
 import utils.DataStructureConverter;
 
@@ -17,6 +18,7 @@ public class SentenceProcessingPipeline {
     private String sentence;
     private Set<Triple> triples;
     private Map<String, List<Triple>> sentenceToTriplesMap;
+    private List<Triple> semanticRolesTriples;
     private List<Triple> openIETriples;
     private List<Triple> corefTriples;
 
@@ -34,7 +36,17 @@ public class SentenceProcessingPipeline {
 
     }
 
+    public SentenceProcessingPipeline(String sentence){
+        this.sentence = sentence;
+
+        triples = new HashSet<>();
+        openIETriples = new ArrayList<>();
+        corefTriples = new ArrayList<>();
+        semanticRolesTriples = new ArrayList<>();
+    }
+
     public void progressThroughPipeline(){
+        processSentenceWithNLU();
         processSentenceWithOpenIE();
         processSentenceWithCoref();
     }
@@ -47,6 +59,12 @@ public class SentenceProcessingPipeline {
     private void processSentenceWithCoref(){
         corefTriples.addAll(CoreNLPInterface.getCorefTriplesOf(sentence));
         triples.addAll(corefTriples);
+    }
+
+    private void processSentenceWithNLU(){
+        for(SemanticRole role: NLUInterface.getSemanticRolesOf(sentence))
+            semanticRolesTriples.add(role.getTriple());
+        triples.addAll(semanticRolesTriples);
     }
 
     public Set<Triple> getTriples(){

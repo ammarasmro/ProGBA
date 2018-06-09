@@ -1,6 +1,7 @@
 package ProGBA;
 
 import algorithms.Pipeline;
+import data_structures.PipelineDocument;
 import interfaces.DataManagerInterface;
 
 import static spark.Spark.*;
@@ -28,9 +29,10 @@ public class ProGBAPI {
             return DataManagerInterface.getPipelineDocuments();
         });
 
-        get("/choose-doc/:doc-id", (req, res) -> {
-            pipeline.queryDrQA(req.params("doc-id"));
-            return DataManagerInterface.getPipelineDocuments();
+        get("/choose-doc/:doc-number", (req, res) -> {
+            PipelineDocument document = pipeline.getPipelineDocument(Integer.valueOf(req.params("doc-number")));
+            pipeline.putDocumentThroughPipeline(document);
+            return document;
         });
 
         get("/user-utterance/:utter", (req, res) -> {
