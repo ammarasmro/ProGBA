@@ -13,8 +13,8 @@ public class DrQAInterface {
     }
 
     public static WikipediaDocument[] retrieveWikiDocs(String query){
-
-        return DataStructureConverter.jsonStringToWikipediaDocumentsArray(DrQAClient.queryTextToDocumentStringJsonResponse(query, 5));
+        String jsonResponse = DrQAClient.queryTextToDocumentStringJsonResponse(query, 5);
+        return DataStructureConverter.jsonStringToWikipediaDocumentsArray(jsonResponse);
     }
 
     public static void main(String[] args) {

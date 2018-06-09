@@ -39,7 +39,6 @@ public class PipelineDocument {
         this.context = context;
     }
 
-
     public String getDocId(){
         return docId;
     }
@@ -120,7 +119,17 @@ public class PipelineDocument {
         this.triples = triples;
     }
 
-
+    @Override
+    public String toString(){
+        return String.format("Summary: %s\n" +
+                "Document Score: %.2f\n" +
+                "Concepts: %s\n" +
+                "Keywords: %s\n",
+                context.substring(100) + "...",
+                docScore,
+                concepts,
+                keywords);
+    }
 
 
 }

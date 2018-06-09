@@ -25,6 +25,7 @@ public class Pipeline {
         pipelineDocument.setSemanticRoles(NLUInterface.getSemanticRolesOf(pipelineDocument.getContext()));
         pipelineDocument.setCategories(NLUInterface.getCategoryOf(pipelineDocument.getContext()));
         pipelineDocument.setKeywords(NLUInterface.getKeywordsOf(pipelineDocument.getContext()));
+        pipelineDocument.setConcepts(NLUInterface.getConceptsOf(pipelineDocument.getContext()));
     }
 
     public void putDocumentThroughPipeline(PipelineDocument pipelineDocument){
@@ -46,7 +47,6 @@ public class Pipeline {
         PipelineDocument pipelineDocument = pipeline.getPipelineDocument(1);
         pipeline.processDocumentsWithNLU(pipelineDocument);
         pipeline.putDocumentThroughPipeline(pipelineDocument);
-//        pipeline.processDocumentsWithNLU(null);
         System.out.flush();
     }
 

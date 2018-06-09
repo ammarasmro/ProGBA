@@ -26,6 +26,8 @@ public class DataManager {
 
     private Set<String> currentTags;
 
+    private Set<String> docTags;
+
     public DataManager(){
 
         pipelineDocuments = new ArrayList<>();
@@ -35,6 +37,7 @@ public class DataManager {
 
         userUtterances = new ArrayList<>();
         currentTags = new HashSet<>();
+        docTags = new HashSet<>();
     }
 
     public boolean storeTriple(Triple triple){
@@ -85,6 +88,14 @@ public class DataManager {
 
     public void setMainTag(String mainTag) {
         this.mainTag = mainTag;
+    }
+
+    public Set<String> getDocTags() {
+        return docTags;
+    }
+
+    public void setDocTags(Set<String> docTags) {
+        this.docTags = docTags;
     }
 
 
