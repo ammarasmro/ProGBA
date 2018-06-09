@@ -32,15 +32,17 @@ public class ProGBAPI {
         get("/choose-doc/:doc-number", (req, res) -> {
             PipelineDocument document = pipeline.getPipelineDocument(Integer.valueOf(req.params("doc-number")));
             pipeline.putDocumentThroughPipeline(document);
-            return document;
+            return document.getTriples();
         });
 
         get("/user-utterance/:utter", (req, res) -> {
+            // TODO: add converation handling
             return req.params("utter");
         });
 
         get("/question/:question", (req, res) -> {
             // TODO: Use DrQA Reader to get short answer
+//            pipeline.askDrQA(req.params("question"));
             return req.params("question");
         });
     }
