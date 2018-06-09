@@ -25,7 +25,11 @@ public class ProGBAPI {
 
         get("/query/:query", (req, res) -> {
             pipeline.queryDrQA(req.params("query"));
+            return DataManagerInterface.getPipelineDocuments();
+        });
 
+        get("/choose-doc/:doc-id", (req, res) -> {
+            pipeline.queryDrQA(req.params("doc-id"));
             return DataManagerInterface.getPipelineDocuments();
         });
 

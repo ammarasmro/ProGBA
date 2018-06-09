@@ -31,6 +31,16 @@ public class PipelineDocument {
         this.triples = new ArrayList<Triple>();
     }
 
+    public PipelineDocument(String title, String content, int resultNumber){
+        this.context = content;
+        this.docId = title;
+        this.docScore = 0;
+        this.resultNumber = resultNumber;
+        this.span = "";
+        this.spanScore = 0;
+        this.triples = new ArrayList<Triple>();
+    }
+
     public String getContext(){
         return context;
     }

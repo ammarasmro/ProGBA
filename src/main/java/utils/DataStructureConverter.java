@@ -63,6 +63,10 @@ public class DataStructureConverter {
         return stringsToTriple(relationTriple.subjectGloss(), relationTriple.relationGloss(), relationTriple.objectGloss());
     }
 
+    public static PipelineDocument wikiDocumentToPipelineDocument(WikipediaDocument wikiDoc, int resultNumber){
+        return new PipelineDocument(wikiDoc.getTitle(), wikiDoc.getContent(), resultNumber);
+    }
+
     public static void main(String[] args) {
 
     }
