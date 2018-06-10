@@ -1,34 +1,29 @@
 package algorithms;
 
-import clients.NaturalLanguageUnderstandingClient;
-import data.DataManager;
+import data_structures.Concept;
 import data_structures.DrQAResponseDocument;
 import data_structures.PipelineDocument;
-import data_structures.SemanticRole;
 import data_structures.WikipediaDocument;
 import interfaces.*;
 import utils.DataStructureConverter;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 public class Pipeline {
 
     public void askDrQA(String query){
-        // TODO: change functionality to answer questions
+        // TODO: change functionality to answer questions then process if answer was good
         for(DrQAResponseDocument drQADoc: DrQAInterface.queryDocuments(query)){
             DataManagerInterface.addPipelineDocument(initializePipelineDocumentFromDrQAResponse(drQADoc));
         }
     }
 
     public void queryDrQA(String query){
+        updateTags(DataManagerInterface.getUserTags(), NLUInterface.getConceptsOf(query));
         DataManagerInterface.getPipelineDocuments().clear();
         int counter = 1;
         for(WikipediaDocument wikiDoc: DrQAInterface.retrieveWikiDocs(query)){
@@ -37,6 +32,13 @@ public class Pipeline {
             document.setConcepts(NLUInterface.getConceptsOf(cleanContent));
             DataManagerInterface.addPipelineDocument(document);
             counter++;
+        }
+    }
+
+    private void updateTags(Set<String> tags, List<Concept> concepts){
+        tags.clear();
+        for(Concept concept: concepts){
+            tags.add(concept.getConcept());
         }
     }
 
@@ -62,6 +64,7 @@ public class Pipeline {
 
     public void putDocumentThroughPipeline(PipelineDocument pipelineDocument){
         processDocumentsWithNLU(pipelineDocument);
+        updateTags(DataManagerInterface.getDocTags(), pipelineDocument.getConcepts());
         String[] sentences = getCleanSentences(pipelineDocument);
         SentenceProcessingPipeline sentencePipeline;
         for(String sentence: sentences){

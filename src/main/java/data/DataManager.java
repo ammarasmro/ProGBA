@@ -28,6 +28,13 @@ public class DataManager {
 
     private Set<String> docTags;
 
+
+
+    private Set<String> userTags;
+
+    // TODO: Consider adding conversations analysis to get more comprehensive tags
+//    private Set<String> conversationTags
+
     public DataManager(){
 
         pipelineDocuments = new ArrayList<>();
@@ -88,6 +95,14 @@ public class DataManager {
 
     public void setMainTag(String mainTag) {
         this.mainTag = mainTag;
+    }
+
+    public Set<String> getUserTags() {
+        return userTags;
+    }
+
+    public void setUserTags(Set<String> userTags) {
+        this.userTags = userTags;
     }
 
     public Set<String> getDocTags() {
