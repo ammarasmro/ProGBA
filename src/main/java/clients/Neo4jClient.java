@@ -18,7 +18,13 @@ import utils.TextUtils;
 
 public class Neo4jClient implements AutoCloseable {
 
-    private static Driver driver = GraphDatabase.driver( "bolt://localhost:7687", AuthTokens.basic( "neo4j", "ammar" ) );
+//    private static Driver driver = GraphDatabase.driver( "bolt://localhost:7687", AuthTokens.basic( "neo4j", "ammar" ) );
+
+    private static Driver driver;
+
+    public Neo4jClient(){
+        this( "bolt://localhost:7687", "neo4j", "ammar" );
+    }
 
     public Neo4jClient( String uri, String user, String password ) {
         driver = GraphDatabase.driver( uri, AuthTokens.basic( user, password ) );
@@ -30,7 +36,7 @@ public class Neo4jClient implements AutoCloseable {
         return true;
     }
 
-    public static void addTriple(String source, String relation, String destination,
+    public void addTriple(String source, String relation, String destination,
                                  String sourceType, String relationType, String destinationType,
                                  String sourceTextType, String destinationTextType){
         try ( Session session = driver.session() )
@@ -76,7 +82,7 @@ public class Neo4jClient implements AutoCloseable {
         }
     }
 
-    public static void deleteEverything()
+    public void deleteEverything()
     {
         try ( Session session = driver.session() )
         {
