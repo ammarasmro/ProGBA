@@ -8,8 +8,16 @@ import java.net.*;
 
 public class DrQAClient {
 
+    private boolean status = false;
 
-    public static String queryTextToStringJsonResponse(String query) {
+    public DrQAClient(){
+
+        // TODO: Change to make a real check or add instantiation first
+        status = true;
+    }
+
+
+    public String queryTextToStringJsonResponse(String query) {
         String result = "";
         try {
             URL hostUrl = new URL("http://localhost:5000/question/");
@@ -19,13 +27,17 @@ public class DrQAClient {
                     connection.getInputStream()));
             result = HttpUtils.bufferedReaderToString(in);
             in.close();
+            // This is a temporary fix for not checking the status from DrQA
+            status = true;
         } catch (Exception e){
             e.printStackTrace();
+            // This is a temporary fix for not checking the status from DrQA
+            status = false;
         }
         return result;
     }
 
-    public static String queryTextToDocumentStringJsonResponse(String query, int numberOfDocuments) {
+    public String queryTextToDocumentStringJsonResponse(String query, int numberOfDocuments) {
         String result = "";
         try {
             URL hostUrl = new URL("http://localhost:5000/docs/");
@@ -35,16 +47,25 @@ public class DrQAClient {
                     connection.getInputStream()));
             result = HttpUtils.bufferedReaderToString(in);
             in.close();
+            status = true;
         } catch (Exception e){
             e.printStackTrace();
+            status = false;
         }
         return result;
     }
 
+    /**
+     * TODO: add an HTTP request to check for the status
+     * @return status of the DrQA server
+     */
+    public boolean getStatus() {
+        return status;
+    }
 
     public static void main(String[] args) throws Exception {
 
 //        System.out.println(queryTextToStringJsonResponse("Automotive%design"));
-        System.out.println(queryTextToDocumentStringJsonResponse("Automotive%design", 5));
+//        System.out.println(queryTextToDocumentStringJsonResponse("Automotive%design", 5));
     }
 }

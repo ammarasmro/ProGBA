@@ -7,14 +7,20 @@ import utils.DataStructureConverter;
 
 public class DrQAInterface {
 
+    private static DrQAClient client = new DrQAClient();
+
     public static DrQAResponseDocument[] queryDocuments(String query){
 
-        return DataStructureConverter.jsonStringToDrQADocsArray(DrQAClient.queryTextToStringJsonResponse(query));
+        return DataStructureConverter.jsonStringToDrQADocsArray(client.queryTextToStringJsonResponse(query));
     }
 
     public static WikipediaDocument[] retrieveWikiDocs(String query){
-        String jsonResponse = DrQAClient.queryTextToDocumentStringJsonResponse(query, 5);
+        String jsonResponse = client.queryTextToDocumentStringJsonResponse(query, 5);
         return DataStructureConverter.jsonStringToWikipediaDocumentsArray(jsonResponse);
+    }
+
+    public static boolean getStatusOfDrQA(){
+        return client.getStatus();
     }
 
     public static void main(String[] args) {

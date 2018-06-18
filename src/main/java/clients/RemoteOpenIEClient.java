@@ -19,14 +19,20 @@ public class RemoteOpenIEClient {
     StanfordCoreNLPClient pipeline;
     Annotation document;
 
+    private boolean status = false;
 
     public RemoteOpenIEClient(){
         props = new Properties();
         props.setProperty("annotators", "tokenize,ssplit,pos,lemma,depparse,natlog,openie");
         props.setProperty("openie.triple.all_nominals", "true");
 
-        pipeline = new StanfordCoreNLPClient(props, "http://localhost", 8000, 2);
+        try {
+            pipeline = new StanfordCoreNLPClient(props, "http://54.213.71.86", 8000, 2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        status = true;
 
     }
 
@@ -48,9 +54,13 @@ public class RemoteOpenIEClient {
         pipeline.annotate(document);
     }
 
+    public boolean getStatus(){
+        return status;
+    }
+
     public static void main(String[] args) {
         RemoteOpenIEClient openIEClient = new RemoteOpenIEClient();
-        openIEClient.getTriples("Ammar is the best");
+        System.out.println(openIEClient.getTriples("Ammar is the best"));
     }
 
 

@@ -22,14 +22,21 @@ public class RemoteCorefClient {
     StanfordCoreNLPClient pipeline;
     Annotation document;
 
+    private boolean status = false;
+
 
     public RemoteCorefClient(){
         props = new Properties();
         props.setProperty("annotators", "tokenize,ssplit,pos,lemma,ner,parse,coref.mention,coref");
         props.setProperty("coref.algorithm", "neural");
 
-        pipeline = new StanfordCoreNLPClient(props, "http://localhost", 9000, 2);
+        try{
+            pipeline = new StanfordCoreNLPClient(props, "http://http://54.213.71.86", 9000, 2);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
+        status = true;
 
     }
 
@@ -46,5 +53,9 @@ public class RemoteCorefClient {
     private void annotateThis(String sentence){
         document = new Annotation(sentence);
         pipeline.annotate(document);
+    }
+
+    public boolean getStatus(){
+        return status;
     }
 }

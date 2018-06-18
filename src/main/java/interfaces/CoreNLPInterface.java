@@ -23,6 +23,14 @@ public class CoreNLPInterface {
         return corefClient.getTriples(sentence);
     }
 
+    public static boolean getStatusOfOpenIE(){
+        return openIEClient.getStatus();
+    }
+
+    public static boolean getStatusOfCoref(){
+        return corefClient.getStatus();
+    }
+
 
     public static void main(String[] args) {
         System.out.println(getOpenIETriplesOf("Car hydraulics are installed into an automobile that allows for an adjustment in height of the vehicle."));
