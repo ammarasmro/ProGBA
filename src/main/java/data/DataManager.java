@@ -28,9 +28,10 @@ public class DataManager {
 
     private Set<String> docTags;
 
-
-
     private Set<String> userTags;
+
+    private Map<String, Set<Integer>> queryTagsToNodesMap;
+    private Map<String, Set<Integer>> documentTagsToNodesMap;
 
     // TODO: Consider adding conversations analysis to get more comprehensive tags
 //    private Set<String> conversationTags
@@ -45,6 +46,9 @@ public class DataManager {
         userUtterances = new ArrayList<>();
         currentTags = new HashSet<>();
         docTags = new HashSet<>();
+
+        queryTagsToNodesMap = new HashMap<>();
+        documentTagsToNodesMap = new HashMap<>();
     }
 
     public boolean storeTriple(Triple triple){
@@ -111,6 +115,36 @@ public class DataManager {
 
     public void setDocTags(Set<String> docTags) {
         this.docTags = docTags;
+    }
+
+    public Map<String, Set<Integer>> getQueryTagsToNodesMap() {
+        return queryTagsToNodesMap;
+    }
+
+    public void setQueryTagsToNodesMap(Map<String, Set<Integer>> queryTagsToNodesMap) {
+        this.queryTagsToNodesMap = queryTagsToNodesMap;
+    }
+
+    public Map<String, Set<Integer>> getDocumentTagsToNodesMap() {
+        return documentTagsToNodesMap;
+    }
+
+    public void setDocumentTagsToNodesMap(Map<String, Set<Integer>> documentTagsToNodesMap) {
+        this.documentTagsToNodesMap = documentTagsToNodesMap;
+    }
+
+    public void updateQueryTags(Collection<Concept> concepts, Collection<Integer> ids){
+        for(Concept concept: concepts){
+            String conceptText = concept.getConcept();
+            queryTagsToNodesMap.getOrDefault(conceptText, new HashSet<Integer>()).addAll(ids);
+        }
+    }
+
+    public void updateDocumentTags(Collection<Concept> concepts, Collection<Integer> ids){
+        for(Concept concept: concepts){
+            String conceptText = concept.getConcept();
+            documentTagsToNodesMap.getOrDefault(conceptText, new HashSet<Integer>()).addAll(ids);
+        }
     }
 
 

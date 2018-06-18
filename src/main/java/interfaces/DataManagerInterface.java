@@ -3,6 +3,7 @@ package interfaces;
 import data.DataManager;
 import data_structures.*;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -37,4 +38,13 @@ public class DataManagerInterface {
     public static void setUserTags(Set<String> tags){ dataManager.setUserTags(tags); }
 
     public static Set<String> getUserTags(){ return dataManager.getUserTags(); }
+
+    public static void updateQueryTags(Collection<Concept> concepts, Collection<Integer> ids){
+        dataManager.updateQueryTags(concepts, ids);
+    }
+
+    public static void updateDocumentTags(Collection<Concept> concepts, Collection<Integer> ids){
+        dataManager.updateDocumentTags(concepts, ids);
+    }
+
 }

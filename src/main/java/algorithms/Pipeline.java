@@ -1,16 +1,10 @@
 package algorithms;
 
-import data_structures.Concept;
-import data_structures.DrQAResponseDocument;
-import data_structures.PipelineDocument;
-import data_structures.WikipediaDocument;
+import data_structures.*;
 import interfaces.*;
 import utils.DataStructureConverter;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 public class Pipeline {
@@ -35,7 +29,7 @@ public class Pipeline {
         }
     }
 
-    private void updateTags(Set<String> tags, List<Concept> concepts){
+    private void updateTags(Collection<String> tags, Collection<Concept> concepts){
         tags.clear();
         for(Concept concept: concepts){
             tags.add(concept.getConcept());
@@ -70,8 +64,21 @@ public class Pipeline {
         for(String sentence: sentences){
             sentencePipeline = new SentenceProcessingPipeline(sentence);
             sentencePipeline.progressThroughPipeline();
+            Set<Triple> sentenceTriples = sentencePipeline.getTriples();
+            updateTagsWithTriples(pipelineDocument.getConcepts(), sentenceTriples);
             pipelineDocument.getTriples().addAll(sentencePipeline.getTriples());
         }
+    }
+
+    private void updateTagsWithTriples(Collection<Concept> concepts, Set<Triple> sentenceTriples) {
+        Set<Integer> ids = new HashSet<>();
+        for(Triple triple: sentenceTriples){
+            ids.add(triple.getSubject().getId());
+            ids.add(triple.getObject().getId());
+        }
+        DataManagerInterface.updateDocumentTags(concepts, ids);
+        // TODO: GET AN ID GENERATING SERVICE TO GENERATE UNIQUE IDS EVERY TIME
+        // TODO: Publish triples to graph for every document
     }
 
     public String[] getCleanSentences(PipelineDocument document){

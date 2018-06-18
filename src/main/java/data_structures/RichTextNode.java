@@ -4,13 +4,19 @@ import java.util.HashSet;
 import java.util.List;
 
 public class RichTextNode {
+    int id;
     String sentence;
     HashSet<Keyword> keywords;
 
     public RichTextNode(String sentence) {
+        this.id = -1;
         this.sentence = sentence;
-        keywords = new HashSet<Keyword>();
+        this.keywords = new HashSet<Keyword>();
     }
+
+    public int getId() { return id; }
+
+    public void setId(int id) { this.id = id; }
 
     public String getSentence() {
         return sentence;
