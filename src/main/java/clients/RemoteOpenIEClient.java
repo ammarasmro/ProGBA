@@ -27,7 +27,7 @@ public class RemoteOpenIEClient {
         props.setProperty("openie.triple.all_nominals", "true");
 
         try {
-            pipeline = new StanfordCoreNLPClient(props, "http://54.213.71.86", 8000, 2);
+            pipeline = new StanfordCoreNLPClient(props, "http://204.209.76.206", 8000, 2);
         } catch (Exception e) {
             e.printStackTrace();
         }

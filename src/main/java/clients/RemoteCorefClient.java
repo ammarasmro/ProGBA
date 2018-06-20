@@ -31,7 +31,7 @@ public class RemoteCorefClient {
         props.setProperty("coref.algorithm", "neural");
 
         try{
-            pipeline = new StanfordCoreNLPClient(props, "http://http://54.213.71.86", 9000, 2);
+            pipeline = new StanfordCoreNLPClient(props, "http://204.209.76.206", 9000, 2);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -57,5 +57,10 @@ public class RemoteCorefClient {
 
     public boolean getStatus(){
         return status;
+    }
+
+    public static void main(String[] args) {
+        RemoteCorefClient client = new RemoteCorefClient();
+        System.out.println(client.getTriples("Ammar is the best. He was born in Iraq"));
     }
 }
