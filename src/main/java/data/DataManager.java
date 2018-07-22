@@ -8,6 +8,9 @@ import java.util.*;
 
 public class DataManager {
 
+    private String projectTitle;
+    private String aspect;
+
     List<PipelineDocument> pipelineDocuments;
 
     Map<String, ArrayList<PipelineDocument>> pipelineDocumentsMap;
@@ -46,6 +49,7 @@ public class DataManager {
         userUtterances = new ArrayList<>();
         currentTags = new HashSet<>();
         docTags = new HashSet<>();
+        userTags = new HashSet<>();
 
         queryTagsToNodesMap = new HashMap<>();
         documentTagsToNodesMap = new HashMap<>();
@@ -55,8 +59,8 @@ public class DataManager {
         return true;
     }
 
-    public List<PipelineDocument> getPipelineDocuments(){
-        return pipelineDocuments;
+    public Collection<PipelineDocument> getPipelineDocuments(){
+        return documentDirectory.values();
     }
 
     public void addPipelineDocument(PipelineDocument doc){
@@ -148,4 +152,15 @@ public class DataManager {
     }
 
 
+    public void setCurrentAspect(String aspect) {
+        this.aspect = aspect;
+    }
+
+    public void setProjectTitle(String project) {
+        this.projectTitle = project;
+    }
+
+    public String getAspect() {
+        return this.aspect;
+    }
 }

@@ -19,7 +19,7 @@ public class DataManagerInterface {
         dataManager.addPipelineDocument(doc);
     }
 
-    public static List<PipelineDocument> getPipelineDocuments(){
+    public static Collection<PipelineDocument> getPipelineDocuments(){
         return dataManager.getPipelineDocuments();
     }
 
@@ -47,4 +47,15 @@ public class DataManagerInterface {
         dataManager.updateDocumentTags(concepts, ids);
     }
 
+    public static void setCurrentAspect(String aspect) {
+        dataManager.setCurrentAspect(aspect);
+    }
+
+    public static void setProjectTitle(String project) {
+        dataManager.setProjectTitle(project);
+    }
+
+    public static String getCurrentAspect() {
+        return dataManager.getAspect();
+    }
 }
