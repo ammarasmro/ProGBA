@@ -5,7 +5,7 @@ import clients.Neo4jClient;
 
 public class GraphDBInterface {
 
-    private  static Neo4jClient client = new Neo4jClient();
+    private static Neo4jClient client = new Neo4jClient();
 
     public static void addSubjectObjectTriple(String subject, String verb, String object){
         client.addTriple(subject, verb, object,
@@ -55,6 +55,28 @@ public class GraphDBInterface {
                 "category text", "category text");
     }
 
+    public static void addNodeToTagLink(String node, String nodeType, String relation, String tag, String tagType){
+        client.addTriple(node, relation, tag,
+                nodeType, "tagged as", tagType,
+                nodeType + " text", "tag text");
+    }
+
+    public static void addNodeWithTags(String nodeType, String nodeText, String[] docTags, String[] userTags){
+        client.addNodeWithTags(nodeType, nodeText, docTags, userTags);
+    }
+
+    public static void addRelation(String source, String relation, String destination,
+                                   String sourceType, String relationType, String destinationType,
+                                   String sourceTextType, String destinationTextType){
+        client.addRelation(source, relation, destination,
+                sourceType, relationType, destinationType,
+                sourceTextType, destinationTextType);
+    }
+
+    public static void addSubjectNode(String subjectText, String[] docTags, String[] userTags){
+        addNodeWithTags("Subject", subjectText, docTags, userTags);
+    }
+
     public static void main(String[] args) {
         client.deleteEverything();
         addProjectAspectTriple("Car", "has aspect", "Design");
@@ -67,6 +89,13 @@ public class GraphDBInterface {
         addKeywordToCategoryLink("functional design", "categorized as", "design");
         addCategoryToHigherCategoryLink("design", "belongs to", "art");
         addKeywordToDefinitionLink("time", "is", "important");
+        addNodeToTagLink("functional design", "subject",
+                "taggedAs", "Automotive design", "DocTag");
+        addNodeToTagLink("alot of time", "object",
+                "taggedAs", "Automotive design", "DocTag");
+        String[] arr = {"art", "design"};
+//        addNodeWithTags("subject", "Subject 12", arr);
+//        addNodeWithTags("object", "Object 12", arr);
         Neo4jClient.closeThis();
 
     }

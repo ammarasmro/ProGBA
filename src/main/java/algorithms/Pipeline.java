@@ -1,5 +1,6 @@
 package algorithms;
 
+import com.google.common.graph.Graph;
 import data_structures.*;
 import interfaces.*;
 import utils.DataStructureConverter;
@@ -9,6 +10,12 @@ import java.util.*;
 
 public class Pipeline {
 
+    private GraphBuilder graphBuilder;
+
+    public Pipeline(){
+        graphBuilder = new GraphBuilder();
+    }
+
     public void askDrQA(String query){
         // TODO: change functionality to answer questions then process if answer was good
         for(DrQAResponseDocument drQADoc: DrQAInterface.queryDocuments(query)){
@@ -17,6 +24,7 @@ public class Pipeline {
     }
 
     public void queryDrQA(String query){
+        query = query.replaceAll("%20", " ");
         updateTags(DataManagerInterface.getUserTags(), NLUInterface.getConceptsOf(query));
         DataManagerInterface.getPipelineDocuments().clear();
         int counter = 1;
@@ -34,6 +42,9 @@ public class Pipeline {
         for(Concept concept: concepts){
             tags.add(concept.getConcept());
         }
+        System.out.println(tags);
+        System.out.println(DataManagerInterface.getDocTags());
+        System.out.println(DataManagerInterface.getUserTags());
     }
 
     public PipelineDocument getPipelineDocument(int docNumber){
@@ -61,15 +72,68 @@ public class Pipeline {
         updateTags(DataManagerInterface.getDocTags(), pipelineDocument.getConcepts());
         String[] sentences = getCleanSentences(pipelineDocument);
         SentenceProcessingPipeline sentencePipeline;
-        for(String sentence: sentences){
+        Cleanser cleanser = new Cleanser(pipelineDocument);
+        // TODO: change this test sentences back
+        String[] testSentences = Arrays.copyOfRange(sentences, 0, 2);
+        for(String sentence: testSentences){
             sentencePipeline = new SentenceProcessingPipeline(sentence);
             sentencePipeline.progressThroughPipeline();
             Set<Triple> sentenceTriples = sentencePipeline.getTriples();
+            cleanser.cleanseCollection(pipelineDocument, sentenceTriples);
+            persistTriplesToGraph(cleanser.getNormalTriples(), cleanser.getWordToWordTriples());
             updateTagsWithTriples(pipelineDocument.getConcepts(), sentenceTriples);
-            pipelineDocument.getTriples().addAll(sentencePipeline.getTriples());
+//            pipelineDocument.getTriples().addAll(sentencePipeline.getTriples());
         }
     }
 
+    private void persistTriplesToGraph(Collection<Triple> normalTriples, Collection<Triple> wordToWordTriples){
+        graphBuilder.updateTags();
+        for(Triple triple: normalTriples){
+            graphBuilder.persistTriple(triple);
+        }
+        for(Triple triple: wordToWordTriples){
+            graphBuilder.persistWordToWordTriple(triple);
+        }
+    }
+
+
+//    private void persistTriplesToGraph(Collection<Triple> triples){
+//        for(Triple triple: triples){
+//            GraphDBInterface.addSubjectObjectTriple(triple.getSubject().getSentence(), triple.getVerb(),
+//                    triple.getObject().getSentence());
+//            for(Keyword keyword: triple.getSubject().getKeywords()){
+//                GraphDBInterface.addKeywordToSubjectLink(keyword.getKeyword(), "linksTo",
+//                        triple.getSubject().getSentence());
+////                for(Category category: keyword.getCategories()){
+////                    GraphDBInterface.addKeywordToCategoryLink();
+////                }
+//            }
+//            for(Keyword keyword: triple.getObject().getKeywords()){
+//                GraphDBInterface.addObjectToKeywordLink(triple.getObject().getSentence(), "hasDefinition",
+//                        keyword.getKeyword());
+//            }
+//            for(String tag: DataManagerInterface.getDocTags()) {
+//                GraphDBInterface.addNodeToTagLink(triple.getSubject().getSentence(), "subject",
+//                        "taggedAs", tag, "DocTag");
+//                GraphDBInterface.addNodeToTagLink(triple.getObject().getSentence(), "object",
+//                        "taggedAs", tag, "DocTag");
+//            }
+//            for(String tag: DataManagerInterface.getUserTags()) {
+//                GraphDBInterface.addNodeToTagLink(triple.getSubject().getSentence(), "subject",
+//                        "taggedAs", tag, "UserTag");
+//                GraphDBInterface.addNodeToTagLink(triple.getObject().getSentence(), "object",
+//                        "taggedAs", tag, "UserTag");
+//            }
+//        }
+//
+//    }
+
+
+    /**
+     * Deprecated
+     * @param concepts
+     * @param sentenceTriples
+     */
     private void updateTagsWithTriples(Collection<Concept> concepts, Set<Triple> sentenceTriples) {
         Set<Integer> ids = new HashSet<>();
         for(Triple triple: sentenceTriples){
@@ -78,7 +142,6 @@ public class Pipeline {
         }
         DataManagerInterface.updateDocumentTags(concepts, ids);
         // TODO: GET AN ID GENERATING SERVICE TO GENERATE UNIQUE IDS EVERY TIME
-        // TODO: Publish triples to graph for every document
     }
 
     public String[] getCleanSentences(PipelineDocument document){

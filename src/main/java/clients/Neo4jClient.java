@@ -2,6 +2,7 @@ package clients;
 
 import static org.neo4j.driver.v1.Values.parameters;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -54,7 +55,58 @@ public class Neo4jClient implements AutoCloseable {
                             TextUtils.toUpperCamelCase(destinationType),
                             TextUtils.toLowerCamelCase(destinationTextType),
                             TextUtils.toUpperUnderscored(relationType)),
-                            parameters( "source", source, "relation", relation, "destination", destination ) );
+                            parameters( "source", source.toLowerCase(), "relation",
+                                    relation.toLowerCase(), "destination", destination.toLowerCase() ) );
+                    result.consume();
+                    return "Triple added!";
+                }
+            } );
+        }
+    }
+
+    public void addNodeWithTags(String nodeType, String nodeText, String[] docTags, String[] userTags){
+        try ( Session session = driver.session() )
+        {
+            String transactionResponse = session.writeTransaction( new TransactionWork<String>()
+            {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    StatementResult result = tx.run( String.format("MERGE (node: %s {%s: $nodeText})\n" +
+                                    "ON CREATE SET node.docTags = $docTags, node.userTags = $userTags\n" +
+                                    "ON MATCH SET node.docTags = node.docTags + [x IN $docTags WHERE NOT x IN node.docTags]," +
+                                    "node.userTags = node.userTags + [x IN $userTags WHERE NOT x IN node.userTags]",
+                            TextUtils.toUpperCamelCase(nodeType),
+                            TextUtils.toLowerCamelCase(nodeType + " text")),
+                            parameters( "nodeText", nodeText.toLowerCase(), "docTags",
+                                    docTags, "userTags", userTags ) );
+                    result.consume();
+                    return "Triple added!";
+                }
+            } );
+        }
+    }
+
+    public void addRelation(String source, String relation, String destination,
+                          String sourceType, String relationType, String destinationType,
+                          String sourceTextType, String destinationTextType){
+        try ( Session session = driver.session() )
+        {
+            String transactionResponse = session.writeTransaction( new TransactionWork<String>()
+            {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    StatementResult result = tx.run( String.format("MERGE (source: %s {%s: $source})\n" +
+                                    "MERGE (destination: %s {%s: $destination})\n" +
+                                    "MERGE (source)-[: %s {relationText: $relation}]->(destination)",
+                            TextUtils.toUpperCamelCase(sourceType),
+                            TextUtils.toLowerCamelCase(sourceTextType),
+                            TextUtils.toUpperCamelCase(destinationType),
+                            TextUtils.toLowerCamelCase(destinationTextType),
+                            TextUtils.toUpperUnderscored(relationType)),
+                            parameters( "source", source.toLowerCase(), "relation",
+                                    relation.toLowerCase(), "destination", destination.toLowerCase() ) );
                     result.consume();
                     return "Triple added!";
                 }
@@ -104,6 +156,8 @@ public class Neo4jClient implements AutoCloseable {
     {
 
 //        Neo4jClient neo4jClient = new Neo4jClient( "bolt://localhost:7687", "ammar", "ammar" );
+        String[] arr = {"\"ammar\"", "\"neo4j\""};
+        System.out.println(Arrays.toString(arr));
 
     }
 
@@ -116,6 +170,8 @@ public class Neo4jClient implements AutoCloseable {
         // TODO Auto-generated method stub
         driver.close();
     }
+
+
 
 
 
