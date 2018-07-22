@@ -58,4 +58,8 @@ public class DataManagerInterface {
     public static String getCurrentAspect() {
         return dataManager.getAspect();
     }
+
+    public static int getConversationTag(){ return dataManager.getConversationCounter(); }
+
+    public static void startNewConversation() { dataManager.incConversationCounter(); }
 }

@@ -1,6 +1,5 @@
 package algorithms;
 
-import com.google.common.graph.Graph;
 import data_structures.*;
 import interfaces.*;
 import utils.DataStructureConverter;
@@ -24,6 +23,7 @@ public class Pipeline {
     }
 
     public void queryDrQA(String query){
+        DataManagerInterface.startNewConversation();
         query = query.replaceAll("%20", " ");
         updateTags(DataManagerInterface.getUserTags(), NLUInterface.getConceptsOf(query));
         DataManagerInterface.getPipelineDocuments().clear();

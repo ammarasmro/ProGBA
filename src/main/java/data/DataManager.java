@@ -36,8 +36,7 @@ public class DataManager {
     private Map<String, Set<Integer>> queryTagsToNodesMap;
     private Map<String, Set<Integer>> documentTagsToNodesMap;
 
-    // TODO: Consider adding conversations analysis to get more comprehensive tags
-//    private Set<String> conversationTags
+    private int conversationCounter;
 
     public DataManager(){
 
@@ -53,6 +52,7 @@ public class DataManager {
 
         queryTagsToNodesMap = new HashMap<>();
         documentTagsToNodesMap = new HashMap<>();
+        conversationCounter = 0;
     }
 
     public boolean storeTriple(Triple triple){
@@ -162,5 +162,13 @@ public class DataManager {
 
     public String getAspect() {
         return this.aspect;
+    }
+
+    public int getConversationCounter() {
+        return conversationCounter;
+    }
+
+    public void incConversationCounter() {
+        this.conversationCounter++;
     }
 }

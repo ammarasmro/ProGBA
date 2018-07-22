@@ -29,7 +29,7 @@ public class Neo4jClient implements AutoCloseable {
 
     public Neo4jClient( String uri, String user, String password ) {
         driver = GraphDatabase.driver( uri, AuthTokens.basic( user, password ) );
-        init();
+//        init();
     }
 
     public boolean init() {
@@ -64,7 +64,7 @@ public class Neo4jClient implements AutoCloseable {
         }
     }
 
-    public void addNodeWithTags(String nodeType, String nodeText, String[] docTags, String[] userTags){
+    public void addNodeWithTags(String nodeType, String nodeText, String[] docTags, String[] userTags, int convTag){
         try ( Session session = driver.session() )
         {
             String transactionResponse = session.writeTransaction( new TransactionWork<String>()
@@ -73,13 +73,14 @@ public class Neo4jClient implements AutoCloseable {
                 public String execute( Transaction tx )
                 {
                     StatementResult result = tx.run( String.format("MERGE (node: %s {%s: $nodeText})\n" +
-                                    "ON CREATE SET node.docTags = $docTags, node.userTags = $userTags\n" +
+                                    "ON CREATE SET node.docTags = $docTags, node.userTags = $userTags, node.conversations = [$convTag]\n" +
                                     "ON MATCH SET node.docTags = node.docTags + [x IN $docTags WHERE NOT x IN node.docTags]," +
-                                    "node.userTags = node.userTags + [x IN $userTags WHERE NOT x IN node.userTags]",
+                                    "node.userTags = node.userTags + [x IN $userTags WHERE NOT x IN node.userTags]," +
+                                    "node.conversations = node.conversations + $convTag",
                             TextUtils.toUpperCamelCase(nodeType),
                             TextUtils.toLowerCamelCase(nodeType + " text")),
                             parameters( "nodeText", nodeText.toLowerCase(), "docTags",
-                                    docTags, "userTags", userTags ) );
+                                    docTags, "userTags", userTags, "convTag", convTag ) );
                     result.consume();
                     return "Triple added!";
                 }
@@ -155,7 +156,7 @@ public class Neo4jClient implements AutoCloseable {
     public static void main( String... args ) throws Exception
     {
 
-//        Neo4jClient neo4jClient = new Neo4jClient( "bolt://localhost:7687", "ammar", "ammar" );
+        Neo4jClient neo4jClient = new Neo4jClient( "bolt://localhost:7687", "neo4j", "ammar" );
         String[] arr = {"\"ammar\"", "\"neo4j\""};
         System.out.println(Arrays.toString(arr));
 

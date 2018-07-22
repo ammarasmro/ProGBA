@@ -62,7 +62,7 @@ public class GraphDBInterface {
     }
 
     public static void addNodeWithTags(String nodeType, String nodeText, String[] docTags, String[] userTags){
-        client.addNodeWithTags(nodeType, nodeText, docTags, userTags);
+        client.addNodeWithTags(nodeType, nodeText, docTags, userTags, DataManagerInterface.getConversationTag());
     }
 
     public static void addRelation(String source, String relation, String destination,
@@ -78,24 +78,25 @@ public class GraphDBInterface {
     }
 
     public static void main(String[] args) {
-        client.deleteEverything();
-        addProjectAspectTriple("Car", "has aspect", "Design");
-        addAspectToKeywordLink("Design", "has relation", "functional design");
-        addSubjectObjectTriple("design", "is", "cool");
-        addSubjectObjectTriple("functional design", "takes", "alot of time");
-        addKeywordToSubjectLink("functional design", "links to", "functional design");
-        addAspectToKeywordLink("Design", "has keyword", "time");
-        addObjectToKeywordLink("alot of time", "has definition", "time");
-        addKeywordToCategoryLink("functional design", "categorized as", "design");
-        addCategoryToHigherCategoryLink("design", "belongs to", "art");
-        addKeywordToDefinitionLink("time", "is", "important");
-        addNodeToTagLink("functional design", "subject",
-                "taggedAs", "Automotive design", "DocTag");
-        addNodeToTagLink("alot of time", "object",
-                "taggedAs", "Automotive design", "DocTag");
+//        client.deleteEverything();
+//        addProjectAspectTriple("Car", "has aspect", "Design");
+//        addAspectToKeywordLink("Design", "has relation", "functional design");
+//        addSubjectObjectTriple("design", "is", "cool");
+//        addSubjectObjectTriple("functional design", "takes", "alot of time");
+//        addKeywordToSubjectLink("functional design", "links to", "functional design");
+//        addAspectToKeywordLink("Design", "has keyword", "time");
+//        addObjectToKeywordLink("alot of time", "has definition", "time");
+//        addKeywordToCategoryLink("functional design", "categorized as", "design");
+//        addCategoryToHigherCategoryLink("design", "belongs to", "art");
+//        addKeywordToDefinitionLink("time", "is", "important");
+//        addNodeToTagLink("functional design", "subject",
+//                "taggedAs", "Automotive design", "DocTag");
+//        addNodeToTagLink("alot of time", "object",
+//                "taggedAs", "Automotive design", "DocTag");
+        DataManagerInterface.startNewConversation();
         String[] arr = {"art", "design"};
-//        addNodeWithTags("subject", "Subject 12", arr);
-//        addNodeWithTags("object", "Object 12", arr);
+        addNodeWithTags("subject2", "Subject 12", arr, arr);
+        addNodeWithTags("object", "Object 12", arr, arr);
         Neo4jClient.closeThis();
 
     }
