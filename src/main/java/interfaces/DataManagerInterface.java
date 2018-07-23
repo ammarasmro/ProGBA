@@ -1,5 +1,6 @@
 package interfaces;
 
+import conversation_datastructures.UserUtterance;
 import data.DataManager;
 import data_structures.*;
 
@@ -62,4 +63,8 @@ public class DataManagerInterface {
     public static int getConversationTag(){ return dataManager.getConversationCounter(); }
 
     public static void startNewConversation() { dataManager.incConversationCounter(); }
+
+    public static Collection<UserUtterance> getConversation(){ return dataManager.getConversationStack(); }
+
+    public static void addUserUtterance(UserUtterance utter){ dataManager.getConversationStack().addFirst(utter);}
 }

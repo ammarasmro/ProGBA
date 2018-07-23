@@ -1,11 +1,17 @@
 package ProGBA;
 
 import algorithms.Pipeline;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+import conversation_datastructures.UserUtterance;
 import data_structures.PipelineDocument;
 import interfaces.CoreNLPInterface;
 import interfaces.DataManagerInterface;
 import interfaces.DrQAInterface;
 import interfaces.GraphDBInterface;
+
+import java.lang.reflect.Type;
+import java.util.Collection;
 
 import static spark.Spark.*;
 
@@ -64,7 +70,9 @@ public class ProGBAPI {
         get("/query/:query", (req, res) -> {
             pipeline.queryDrQA(req.params("query"));
             System.out.println("done!");
-            return DataManagerInterface.getPipelineDocuments();
+            System.out.println(DataManagerInterface.getPipelineDocuments());
+            return DataManagerInterface.getPipelineDocumentByResultNumber(1).getContext().substring(0, 1000);
+//            return DataManagerInterface.getPipelineDocuments();
         });
 
         /**
@@ -76,6 +84,17 @@ public class ProGBAPI {
             pipeline.putDocumentThroughPipeline(document);
             System.out.println("done!");
             return document.getTriples();
+        });
+
+        /**
+         * Retrieve a list of conversations
+         */
+        get("/conversation/list", (req, res) -> {
+            Gson gson = new Gson();
+            String json = gson.toJson(DataManagerInterface.getConversation());
+//            Type uttersType = new TypeToken<Collection<UserUtterance>>() {}.getType();
+//            Collection<UserUtterance> utters = gson.fromJson(json, uttersType);
+            return json;
         });
 
 

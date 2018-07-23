@@ -8,10 +8,12 @@ import java.util.Set;
 
 public class UserUtterance {
 
+    private Integer id;
     private String text;
     private Set<Concept> concepts;
 
-    public UserUtterance(String text) {
+    public UserUtterance(Integer id, String text) {
+        this.id = id;
         this.text = text;
         this.concepts = new HashSet<Concept>();
         this.concepts.addAll(EnrichmentUtility.getConceptsOfText(text));
@@ -32,6 +34,10 @@ public class UserUtterance {
     public void setConcepts(Set<Concept> concepts) {
         this.concepts = concepts;
     }
+
+    public Integer getId() { return id; }
+
+    public void setId(Integer id) { this.id = id; }
 
     @Override
     public String toString(){

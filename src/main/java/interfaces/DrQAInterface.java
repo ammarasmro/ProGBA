@@ -29,7 +29,9 @@ public class DrQAInterface {
 //        }
 
         for(WikipediaDocument doc: retrieveWikiDocs("Automotive%20Design")){
-            System.out.println(doc);
+            System.out.println(doc.getContent());
+            for (String section: doc.getContent().split("\n+"))
+                System.out.println(section);
         }
     }
 }

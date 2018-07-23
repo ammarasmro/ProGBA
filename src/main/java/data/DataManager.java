@@ -23,8 +23,6 @@ public class DataManager {
 
     Set<Triple> tripleSet;
 
-    List<UserUtterance> userUtterances;
-
     private String mainTag;
 
     private Set<String> currentTags;
@@ -36,7 +34,10 @@ public class DataManager {
     private Map<String, Set<Integer>> queryTagsToNodesMap;
     private Map<String, Set<Integer>> documentTagsToNodesMap;
 
+    // Conversation variables
     private int conversationCounter;
+
+    private Deque<UserUtterance> conversationStack;
 
     public DataManager(){
 
@@ -45,14 +46,15 @@ public class DataManager {
         documentDirectory = new HashMap<>();
         tripleSet = new HashSet<>();
 
-        userUtterances = new ArrayList<>();
         currentTags = new HashSet<>();
         docTags = new HashSet<>();
         userTags = new HashSet<>();
 
         queryTagsToNodesMap = new HashMap<>();
         documentTagsToNodesMap = new HashMap<>();
+
         conversationCounter = 0;
+        conversationStack = new ArrayDeque<UserUtterance>();
     }
 
     public boolean storeTriple(Triple triple){
@@ -73,29 +75,6 @@ public class DataManager {
         return documentDirectory.get(resultNumber);
     }
 
-    public List<UserUtterance> getUserUtterances() {
-        return userUtterances;
-    }
-
-    public void setUserUtterances(List<UserUtterance> userUtterances) {
-        this.userUtterances = userUtterances;
-    }
-
-    public void addUserUtterance(String utteranceText) {
-        userUtterances.add(new UserUtterance(utteranceText));
-        updateTags();
-    }
-
-    public UserUtterance getUtteranceByIndex(int index){
-        return userUtterances.get(index);
-    }
-
-    private void updateTags(){
-        currentTags.clear();
-        for(Concept concept: getUtteranceByIndex(userUtterances.size() - 1).getConcepts()){
-            currentTags.add(concept.getConcept());
-        }
-    }
 
     public String getMainTag() {
         return mainTag;
@@ -171,4 +150,8 @@ public class DataManager {
     public void incConversationCounter() {
         this.conversationCounter++;
     }
+
+    public Deque<UserUtterance> getConversationStack() { return conversationStack; }
+
+    public void setConversationStack(Deque<UserUtterance> conversationStack) { this.conversationStack = conversationStack; }
 }

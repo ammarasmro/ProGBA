@@ -1,5 +1,6 @@
 package algorithms;
 
+import conversation_datastructures.UserUtterance;
 import data_structures.*;
 import interfaces.*;
 import utils.DataStructureConverter;
@@ -25,6 +26,7 @@ public class Pipeline {
     public void queryDrQA(String query){
         DataManagerInterface.startNewConversation();
         query = query.replaceAll("%20", " ");
+        DataManagerInterface.addUserUtterance(new UserUtterance(DataManagerInterface.getConversationTag(), query));
         updateTags(DataManagerInterface.getUserTags(), NLUInterface.getConceptsOf(query));
         DataManagerInterface.getPipelineDocuments().clear();
         int counter = 1;
@@ -70,11 +72,11 @@ public class Pipeline {
     public void putDocumentThroughPipeline(PipelineDocument pipelineDocument){
         processDocumentsWithNLU(pipelineDocument);
         updateTags(DataManagerInterface.getDocTags(), pipelineDocument.getConcepts());
-        String[] sentences = getCleanSentences(pipelineDocument);
+        List<String> sentences = getCleanSentences(pipelineDocument);
         SentenceProcessingPipeline sentencePipeline;
         Cleanser cleanser = new Cleanser(pipelineDocument);
         // TODO: change this test sentences back
-        String[] testSentences = Arrays.copyOfRange(sentences, 0, 2);
+        List<String> testSentences = sentences.subList(0, 2);
         for(String sentence: testSentences){
             sentencePipeline = new SentenceProcessingPipeline(sentence);
             sentencePipeline.progressThroughPipeline();
@@ -144,9 +146,12 @@ public class Pipeline {
         // TODO: GET AN ID GENERATING SERVICE TO GENERATE UNIQUE IDS EVERY TIME
     }
 
-    public String[] getCleanSentences(PipelineDocument document){
+    public List<String> getCleanSentences(PipelineDocument document){
         String content = document.getContext();
-        return OpenNLPInterface.getSentencesOfString(content);
+        List<String> sentences = new ArrayList<>();
+        for(String section: document.getContext().split("\n+"))
+            sentences.addAll(Arrays.asList(OpenNLPInterface.getSentencesOfString(section)));
+        return sentences;
     }
 
     public static PipelineDocument initializePipelineDocumentFromDrQAResponse(DrQAResponseDocument drQAResponseDocument){
@@ -161,7 +166,7 @@ public class Pipeline {
 //        pipeline.putDocumentThroughPipeline(pipelineDocument);
 //        System.out.flush();
 //        System.out.println(Character.toString((char)0x00a0));
-        System.out.println(Arrays.toString(pipeline.getCleanSentences(null)));
+//        System.out.println(Arrays.toString(pipeline.getCleanSentences(null)));
 //        String a = "abcd\u2013bcds\"";
 //        String b = a;
 //        System.out.println(a);
