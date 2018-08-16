@@ -3,6 +3,8 @@ package ProGBA;
 import algorithms.Pipeline;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import conversation_datastructures.UserUtterance;
 import data_structures.PipelineDocument;
 import interfaces.CoreNLPInterface;
@@ -12,6 +14,8 @@ import interfaces.GraphDBInterface;
 
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import static spark.Spark.*;
 
@@ -29,6 +33,8 @@ public class ProGBAPI {
             if(!CoreNLPInterface.getStatusOfOpenIE()) { return "OpenIE has not started yet!\n"; }
             if(!CoreNLPInterface.getStatusOfCoref()) { return "Coref has not started yet!\n"; }
             if(!DrQAInterface.getStatusOfDrQA()) { return "DrQA has not started yet!\n"; }
+            res.header("Access-Control-Allow-Origin", "*");
+//            res.body("All systems are working!\n");
             return "All systems are working!\n";
         });
 
@@ -38,6 +44,7 @@ public class ProGBAPI {
         get("/start-servers", (req, res) -> {
             // TODO: Add server starters for the CoreNLP servers
             // TODO: Add server starter for the DrQA server
+            res.header("Access-Control-Allow-Origin", "*");
             return "Hello from ProGBA!";
         });
 
@@ -47,6 +54,7 @@ public class ProGBAPI {
         get("/stop-servers", (req, res) -> {
             // TODO: Add server stoppers for the CoreNLP servers
             // TODO: Add server stopper for the DrQA server
+            res.header("Access-Control-Allow-Origin", "*");
             return "Goodbye!";
         });
 
@@ -60,6 +68,7 @@ public class ProGBAPI {
                     req.params("aspect"));
             DataManagerInterface.setProjectTitle(req.params("project"));
             DataManagerInterface.setCurrentAspect(req.params("aspect"));
+            res.header("Access-Control-Allow-Origin", "*");
             return String.format("Started Project %s with Aspect %s\n", req.params("project"),
                     req.params("aspect"));
         });
@@ -70,8 +79,15 @@ public class ProGBAPI {
         get("/query/:query", (req, res) -> {
             pipeline.queryDrQA(req.params("query"));
             System.out.println("done!");
-            System.out.println(DataManagerInterface.getPipelineDocuments());
-            return DataManagerInterface.getPipelineDocumentByResultNumber(1).getContext().substring(0, 1000);
+//            System.out.println(DataManagerInterface.getPipelineDocuments());
+            res.header("Access-Control-Allow-Origin", "*");
+            Gson gson = new Gson();
+            JsonElement jsonElement = gson.toJsonTree(DataManagerInterface.getPipelineDocuments());
+            JsonElement jElement = gson.toJsonTree(new JsonObject());
+            jElement.getAsJsonObject().addProperty("conversation-id", DataManagerInterface.getConversationTag());
+            jElement.getAsJsonObject().add("results", jsonElement);
+            return gson.toJson(jElement);
+//            return DataManagerInterface.getPipelineDocumentByResultNumber(1).getContext().substring(0, 1000);
 //            return DataManagerInterface.getPipelineDocuments();
         });
 
@@ -83,6 +99,7 @@ public class ProGBAPI {
             PipelineDocument document = pipeline.getPipelineDocument(Integer.valueOf(req.params("doc-number")));
             pipeline.putDocumentThroughPipeline(document);
             System.out.println("done!");
+            res.header("Access-Control-Allow-Origin", "*");
             return document.getTriples();
         });
 
@@ -94,6 +111,7 @@ public class ProGBAPI {
             String json = gson.toJson(DataManagerInterface.getConversation());
 //            Type uttersType = new TypeToken<Collection<UserUtterance>>() {}.getType();
 //            Collection<UserUtterance> utters = gson.fromJson(json, uttersType);
+            res.header("Access-Control-Allow-Origin", "*");
             return json;
         });
 
@@ -103,6 +121,7 @@ public class ProGBAPI {
          * TODO: Implement
          */
         get("/choose-doc-title/:doc-title", (req, res) -> {
+            res.header("Access-Control-Allow-Origin", "*");
             return req.params("doc-title");
         });
 
@@ -111,6 +130,7 @@ public class ProGBAPI {
          * TODO: Implement
          */
         get("/search-doc/:query", (req, res) -> {
+            res.header("Access-Control-Allow-Origin", "*");
             return req.params("query");
         });
 
@@ -119,6 +139,7 @@ public class ProGBAPI {
          */
         get("/user-utterance/:utter", (req, res) -> {
             // TODO: add converation handling
+            res.header("Access-Control-Allow-Origin", "*");
             return req.params("utter");
         });
 
@@ -128,6 +149,7 @@ public class ProGBAPI {
         get("/question/:question", (req, res) -> {
             // TODO: Use DrQA Reader to get short answers
 //            pipeline.askDrQA(req.params("question"));
+            res.header("Access-Control-Allow-Origin", "*");
             return req.params("question");
         });
     }
