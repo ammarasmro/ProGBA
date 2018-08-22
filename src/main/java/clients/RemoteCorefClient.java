@@ -11,6 +11,7 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLPClient;
 import edu.stanford.nlp.util.CoreMap;
 import utils.DataStructureConverter;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -18,9 +19,10 @@ import java.util.Properties;
 
 public class RemoteCorefClient {
 
-    Properties props;
-    StanfordCoreNLPClient pipeline;
-    Annotation document;
+    private Properties props;
+    private StanfordCoreNLPClient pipeline;
+    private Annotation document;
+    private String CYBERA_IP;
 
     private boolean status = false;
 
@@ -30,8 +32,18 @@ public class RemoteCorefClient {
         props.setProperty("annotators", "tokenize,ssplit,pos,lemma,ner,parse,coref.mention,coref");
         props.setProperty("coref.algorithm", "neural");
 
+        Properties prop = new Properties();
+
         try{
-            pipeline = new StanfordCoreNLPClient(props, "http://204.209.76.206", 9000, 2);
+            prop.load(new FileInputStream("src/main/resources/ProGBA.config"));
+            CYBERA_IP = prop.getProperty("CYBERA_IP");
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+
+
+        try{
+            pipeline = new StanfordCoreNLPClient(props, CYBERA_IP, 9000, 2);
         } catch (Exception e){
             e.printStackTrace();
         }

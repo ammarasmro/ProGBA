@@ -37,6 +37,10 @@ public class Triple {
         this.subject = subject;
     }
 
+    public String getTripleAsString(){
+        return String.format("%s %s %s", subject.getSentence(), verb, object.getSentence());
+    }
+
     @Override
     public String toString(){
         String subjectKeywords = "";

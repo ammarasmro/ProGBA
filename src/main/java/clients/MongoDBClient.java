@@ -1,5 +1,6 @@
 package clients;
 
+
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -24,6 +25,9 @@ import java.util.Arrays;
 import com.mongodb.client.model.changestream.ChangeStreamDocument;
 import org.bson.Document;
 
+/**
+ * STILL IN DEVELOPMENT
+ */
 public class MongoDBClient {
 
     String user = "user1"; // the user name

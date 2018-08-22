@@ -12,8 +12,8 @@ public class DataStructureConverter {
 
     public static Triple stringsToTriple(String subject, String verb, String object){
         Triple triple = new Triple(subject, verb, object);
-//        EnrichmentUtility.enrichNodeWithKeywords(triple.getSubject());
-//        EnrichmentUtility.enrichNodeWithKeywords(triple.getObject());
+        EnrichmentUtility.enrichNodeWithKeywords(triple.getSubject());
+        EnrichmentUtility.enrichNodeWithKeywords(triple.getObject());
         return triple;
     }
 

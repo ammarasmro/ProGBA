@@ -61,6 +61,8 @@ public class Neo4jClient implements AutoCloseable {
                     return "Triple added!";
                 }
             } );
+        } catch (Exception e){
+            System.out.println(source + " " + relation + " " + destination);
         }
     }
 

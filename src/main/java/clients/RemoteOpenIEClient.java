@@ -10,14 +10,16 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLPClient;
 import edu.stanford.nlp.util.CoreMap;
 import utils.DataStructureConverter;
 
+import java.io.FileInputStream;
 import java.util.*;
 
 public class RemoteOpenIEClient {
 
 
-    Properties props;
-    StanfordCoreNLPClient pipeline;
-    Annotation document;
+    private Properties props;
+    private StanfordCoreNLPClient pipeline;
+    private Annotation document;
+    private String CYBERA_IP;
 
     private boolean status = false;
 
@@ -26,8 +28,17 @@ public class RemoteOpenIEClient {
         props.setProperty("annotators", "tokenize,ssplit,pos,lemma,depparse,natlog,openie");
         props.setProperty("openie.triple.all_nominals", "true");
 
+        Properties prop = new Properties();
+
+        try{
+            prop.load(new FileInputStream("src/main/resources/ProGBA.config"));
+            CYBERA_IP = prop.getProperty("CYBERA_IP");
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+
         try {
-            pipeline = new StanfordCoreNLPClient(props, "http://204.209.76.206", 8000, 2);
+            pipeline = new StanfordCoreNLPClient(props, CYBERA_IP, 8000, 2);
         } catch (Exception e) {
             e.printStackTrace();
         }

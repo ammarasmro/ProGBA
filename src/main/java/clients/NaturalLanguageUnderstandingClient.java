@@ -194,13 +194,14 @@ public class NaturalLanguageUnderstandingClient {
 
         System.out.println(paragraph);
 //        List<Keyword> keywords = testClient.getKeywordsOfSentence(line);
-//        List<Concept> concepts = testClient.getConceptsOfSentence(line);
+//        line = "Automotive design Automotive design is the profession";
+        List<Concept> concepts = testClient.getConceptsOfSentence(line);
 //        List<Category> categories = testClient.getCategoryOfSentence(line);
-        List<SemanticRole> semanticRoles = testClient.getSemanticRolesOfDocument(line);
+//        List<SemanticRole> semanticRoles = testClient.getSemanticRolesOfDocument(line);
 //        System.out.println(keywords);
-//        System.out.println(concepts);
+        System.out.println(concepts);
 //        System.out.println(categories);
-        System.out.println(semanticRoles);
+//        System.out.println(semanticRoles);
 
 //        Scanner scanner = new Scanner(System.in);
 //        String input = scanner.nextLine();
