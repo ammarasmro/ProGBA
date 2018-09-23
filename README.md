@@ -30,9 +30,9 @@ The second section uses the OpenIE project of Stanford CoreNLP. This tool splits
 The last part of the pipeline uses part-of-speech tagging and rule based techniques to form logically correct triples. From experiments, this section produced better quality content than the former ones. For this reason, it was placed at the end to be used as a fact checking machine.
 
 ## Goals
--[ ] Develop a grammar checker to use that as a metric to measure the quality of the produced content
--[ ] Store documents with their data in a MongoDB instance
--[ ] Log conversations to a MySQL server
+- [ ] Develop a grammar checker to use that as a metric to measure the quality of the produced content
+- [ ] Store documents with their data in a MongoDB instance
+- [ ] Log conversations to a MySQL server
 
 ## Tech Stack
 * Programming Languages: Java 8 and Python 3.6
